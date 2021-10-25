@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cart.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -10,22 +11,7 @@ namespace Cart
     {
         static void Main(string[] args)
         {
-            #region createDbContextOptionsBuilder
-            var builder = new ConfigurationBuilder();
-            // установка пути к текущему каталогу
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            // получаем конфигурацию из файла appsettings.json
-            builder.AddJsonFile("appsettings.json");
-            // создаем конфигурацию
-            var config = builder.Build();
-            // получаем строку подключения
-            string connectionString = config.GetConnectionString("DefaultConnection");
-
-            var optionsBuilder = new DbContextOptionsBuilder<AppContext>();
-            var options = optionsBuilder
-                .UseSqlServer(connectionString)
-                .Options;
-            #endregion
+            
 
             var u1 = new User() { Login = "A1ex", Name = "Alex" };
             var u2 = new User() { Login = "7Le8", Name = "Gleb" };
@@ -46,33 +32,10 @@ namespace Cart
             o2.Add(p4, 2);
             o2.Add(p5, 1);
 
+            var u3 = new User() { Name = "Galina", Login = "Blanka" };
 
-            using (AppContext db = new AppContext(options))
-            {
-                db.Products.AddRange(p1,p2,p3,p4,p5,p5);
-                db.Users.AddRange(u1,u2);
-                db.Orders.AddRange(o1,o2);
-                db.SaveChanges();
-            
-                var res = db.Orders
-                    .Include(o => o.User)
-                    .Include(o => o.Products)
-                    .Where(o => o.User.Name == "Gleb")
-                    .ToList();
-
-                var res2 = db.Products.OrderBy(o=> o.Name).ToList();
-
-                var res3 = db.Products.Join(db.Positions,
-                    pr => pr.Id,
-                    po => po.Product.Id,
-                    (pr, po) => new { pName = pr.Name, order = po.OrderId }
-                    );
-
-                foreach (var el in res3)
-                {
-                    Console.WriteLine(el.pName+" : "+el.order);
-                }
-            }
+            Controller controller = new Controller();
+            controller.Save<User>(u3);
         }
     }
 }

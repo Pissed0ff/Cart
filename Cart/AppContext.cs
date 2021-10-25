@@ -18,7 +18,7 @@ namespace Cart
         public DbSet<Position> Positions { get; set; }
         public AppContext(DbContextOptions options):base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
     }
