@@ -13,7 +13,6 @@ namespace Cart.Controllers
     class DBActions : IActions
     {
         DbContextOptions Options;
-        DbContextOptions DeleteOptions;
         delegate void Del(object obj);
 
         void SaveInTable<T>(AppContext db, object elem)
@@ -51,8 +50,9 @@ namespace Cart.Controllers
 
         public void ClearDB()
         {
-            using (DeleteContext db = new DeleteContext((DbContextOptions<DeleteContext>) DeleteOptions))
+            using (AppContext db = new AppContext(Options))
             {
+                db.Database.EnsureDeleted();
                 db.SaveChanges();    
             }
         }
@@ -73,7 +73,6 @@ namespace Cart.Controllers
 
         public DBActions()
         {
-            #region createDbContextOptionsBuilder
             var builder = new ConfigurationBuilder();
             // установка пути к текущему каталогу
             var str = Directory.GetCurrentDirectory();
@@ -89,12 +88,6 @@ namespace Cart.Controllers
             Options = optionsBuilder
                 .UseSqlServer(connectionString)
                 .Options;
-
-            var optionsBuilder2 = new DbContextOptionsBuilder<DeleteContext>();
-            DeleteOptions = optionsBuilder2
-                .UseSqlServer(connectionString)
-                .Options;
-            #endregion
         }
     }
 }
