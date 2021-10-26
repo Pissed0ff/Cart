@@ -13,7 +13,8 @@ namespace Cart.Controllers
         public void SaveRange<T>(object[] elements);
 
         public void SetRole(User user, Role role);
-
+        public T GetOneElement<T>(string filter);
+        public List<T> GetAllElements<T>();
         public void ClearDB();
     }
 }

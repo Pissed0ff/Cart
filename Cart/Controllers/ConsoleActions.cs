@@ -14,6 +14,16 @@ namespace Cart.Controllers
             throw new NotImplementedException();
         }
 
+        public List<T> GetAllElements<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetOneElement<T>(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Save<T>(object element)
         {
             Console.WriteLine(element.ToString());

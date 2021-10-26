@@ -23,6 +23,11 @@ namespace Cart
             //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique();
+            modelBuilder.Entity<Order>().HasIndex(o => o.Cod).IsUnique();
+        }
 
     }
 

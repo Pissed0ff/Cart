@@ -14,7 +14,9 @@ namespace Cart.Controllers
     {
         DbContextOptions Options;
         delegate void Del(object obj);
-
+        delegate T Del1<T>(string folter);
+        delegate object DelAll<T>();
+        
         void SaveInTable<T>(AppContext db, object elem)
         {
             Dictionary<Type, Del> dic = new Dictionary<Type, Del>()
@@ -26,6 +28,16 @@ namespace Cart.Controllers
                 };
 
             dic[typeof(T)].Invoke(elem);
+        }
+        object GetFromTable<T>(AppContext db, string filter)
+        {
+            Dictionary<Type, Del1<Object>> dic = new Dictionary<Type, Del1<Object>>()
+                {
+                    { typeof(User),(filter) => db.Users.FirstOrDefault(u => u.Login == filter) },
+                    { typeof(Product),(filter) => db.Products.FirstOrDefault(p => p.Name == filter) },
+                    { typeof(Role),(filter) => db.Roles.FirstOrDefault(r => r.Name == filter) }
+                };
+            return dic[typeof(T)].Invoke(filter);
         }
 
         public void Save<T>(object elem)
@@ -68,6 +80,27 @@ namespace Cart.Controllers
                     user.Roles.Add(role);
                     db.SaveChanges();
                 }
+            }
+        }
+
+        public T GetOneElement<T>(string filter)
+        {
+            using(var db = new AppContext(Options))
+            {
+                return (T)GetFromTable<T>(db, filter);
+            }
+        }
+        public List<T> GetAllElements<T>()
+        {
+            using (var db = new AppContext(Options))
+            {
+                Dictionary<Type, DelAll<Object>> dic = new Dictionary<Type, DelAll<Object>>()
+                {
+                    { typeof(User),() => db.Users.ToList() },
+                    { typeof(Product),() => db.Products.ToList() },
+                    { typeof(Role),() => db.Roles.ToList() }
+                };
+                return (List<T>)dic[typeof(T)].Invoke();
             }
         }
 

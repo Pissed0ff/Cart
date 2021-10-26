@@ -9,6 +9,7 @@ namespace Cart
     public class Order
     {
         public int Id { get; set; }
+        public string Cod { get; set; }
         public User User { get; set; }
         public List<Position> Products { get; set; }
         public DateTime DateOfOrder { get; set; }
