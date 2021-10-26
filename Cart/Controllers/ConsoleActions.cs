@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cart.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,11 @@ namespace Cart.Controllers
         {
             foreach(var el in elements)
                 Console.WriteLine(el.ToString());
+        }
+
+        public void SetRole(User user, Role role)
+        {
+            throw new NotImplementedException();
         }
     }
 }

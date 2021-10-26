@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cart.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace Cart.Controllers
     {
         public void Save<T>(object element);
         public void SaveRange<T>(object[] elements);
+
+        public void SetRole(User user, Role role);
 
         public void ClearDB();
     }
