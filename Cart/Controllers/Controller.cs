@@ -13,19 +13,37 @@ namespace Cart.Controllers
     {
         DbContextOptions options;
         delegate void Del(object obj);
+
+
+        void SaveInTable<T>(AppContext db, object elem)
+        {
+            Dictionary<Type, Del> dic = new Dictionary<Type, Del>()
+                {
+                    { typeof(User),(elem) => db.Users.Add((User)elem) },
+                    { typeof(Order),(elem) => db.Orders.Add((Order)elem) },
+                    { typeof(Product),(elem) => db.Products.Add((Product)elem) }
+                };
+
+            dic[typeof(T)].Invoke(elem);
+        }
+
         public void Save<T>(object elem) 
         {
             //Создание начальных значений и запросы
             using (AppContext db = new AppContext(options))
             {
-                Dictionary<Type, Del> dic = new Dictionary<Type, Del>()
-                {
-                    { typeof(User),(elem) => db.Users.Add((User)elem) }
-                };
+                SaveInTable<T>(db, elem);
+                db.SaveChanges();
+            }
+        }
 
-                dic[typeof(T)].Invoke(elem);
-                
-
+        public void SaveRange<T>(object[] elems)
+        {
+            //Создание начальных значений и запросы
+            using (AppContext db = new AppContext(options))
+            {
+                foreach(var el in elems)
+                    SaveInTable<T>(db, el);
                 db.SaveChanges();
             }
         }

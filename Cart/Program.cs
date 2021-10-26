@@ -32,10 +32,15 @@ namespace Cart
             o2.Add(p4, 2);
             o2.Add(p5, 1);
 
-            var u3 = new User() { Name = "Galina", Login = "Blanka" };
+            Product[] menu = new Product[3]
+                {
+                     new Product() { Name = "Колбаса", Price = 158.00M },
+                     new Product() { Name = "Сало", Price = 199.00M },
+                     new Product() { Name = "Сыр", Price = 112.50M }
+                };
 
             Controller controller = new Controller();
-            controller.Save<User>(u3);
+            controller.SaveRange<Product>(menu);
         }
     }
 }
