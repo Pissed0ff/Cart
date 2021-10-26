@@ -20,8 +20,16 @@ namespace Cart
         public DbSet<Role> Roles { get; set; }
         public AppContext(DbContextOptions options):base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
+        }
+    }
+
+    public class DeleteContext : DbContext
+    {
+        public DeleteContext(DbContextOptions<DeleteContext> options) : base(options)
+        {
+            Database.EnsureDeleted();
         }
     }
 

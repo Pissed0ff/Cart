@@ -10,5 +10,7 @@ namespace Cart.Controllers
     {
         public void Save<T>(object element);
         public void SaveRange<T>(object[] elements);
+
+        public void ClearDB();
     }
 }
