@@ -26,14 +26,6 @@ namespace Cart
 
     }
 
-    public class DeleteContext : DbContext
-    {
-        public DeleteContext(DbContextOptions<DeleteContext> options) : base(options)
-        {
-            Database.EnsureDeleted();
-        }
-    }
-
     public class SampleContextFactory : IDesignTimeDbContextFactory<AppContext>
     {
         public AppContext CreateDbContext(string[] args)
