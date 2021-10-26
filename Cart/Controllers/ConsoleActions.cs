@@ -8,6 +8,11 @@ namespace Cart.Controllers
 {
     class ConsoleActions : IActions
     {
+        public void ClearDB()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Save<T>(object element)
         {
             Console.WriteLine(element.ToString());

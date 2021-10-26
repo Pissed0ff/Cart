@@ -11,7 +11,8 @@ namespace Cart.Controllers
 {
     class DBActions : IActions
     {
-        DbContextOptions options;
+        DbContextOptions Options;
+        DbContextOptions DeleteOptions;
         delegate void Del(object obj);
 
         void SaveInTable<T>(AppContext db, object elem)
@@ -29,7 +30,7 @@ namespace Cart.Controllers
         public void Save<T>(object elem)
         {
             //Создание начальных значений и запросы
-            using (AppContext db = new AppContext(options))
+            using (AppContext db = new AppContext(Options))
             {
                 SaveInTable<T>(db, elem);
                 db.SaveChanges();
@@ -39,7 +40,7 @@ namespace Cart.Controllers
         public void SaveRange<T>(object[] elems)
         {
             //Создание начальных значений и запросы
-            using (AppContext db = new AppContext(options))
+            using (AppContext db = new AppContext(Options))
             {
                 foreach (var el in elems)
                     SaveInTable<T>(db, el);
@@ -47,6 +48,13 @@ namespace Cart.Controllers
             }
         }
 
+        public void ClearDB()
+        {
+            using (DeleteContext db = new DeleteContext((DbContextOptions<DeleteContext>) DeleteOptions))
+            {
+                db.SaveChanges();    
+            }
+        }
         public DBActions()
         {
             #region createDbContextOptionsBuilder
@@ -62,7 +70,12 @@ namespace Cart.Controllers
             string connectionString = config.GetConnectionString("DefaultConnection");
 
             var optionsBuilder = new DbContextOptionsBuilder<AppContext>();
-            options = optionsBuilder
+            Options = optionsBuilder
+                .UseSqlServer(connectionString)
+                .Options;
+
+            var optionsBuilder2 = new DbContextOptionsBuilder<DeleteContext>();
+            DeleteOptions = optionsBuilder2
                 .UseSqlServer(connectionString)
                 .Options;
             #endregion

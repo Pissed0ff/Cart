@@ -46,12 +46,12 @@ namespace Cart
                 };
 
             Controller controller = new Controller();
-            controller.SaveRange<Product>(menu);
 
+            controller.ClearDB();
+            controller.SaveRange<Product>(menu);
             controller.Save<User>(u1);
             controller.Save<User>(u2);
-            controller.Save<Order>(o1);
-            controller.Save<Order>(o2);
+
 
         }
     }

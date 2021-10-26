@@ -23,6 +23,11 @@ namespace Cart.Controllers
             actions.SaveRange<T>(elems);
         }
 
+        public void ClearDB()
+        {
+            actions.ClearDB();
+        }
+
         public Controller()
         {}
     }
