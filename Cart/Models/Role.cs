@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cart
+namespace Cart.Models
 {
-    public class Position
+    public class Role
     {
         public int Id { get; set; }
-        public Product Product { get; set; }
-        public float Qantity { get; set; }
+        public string Name { get; set; }
 
+        public Role() {}
     }
 }
