@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cart.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace Cart.Controllers
         public void SaveRange<T>(object[] elems)
         {
             actions.SaveRange<T>(elems);
+        }
+        public void SetRole(User user,Role role)
+        {
+            actions.SetRole(user, role);
         }
 
         public void ClearDB()

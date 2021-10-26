@@ -13,7 +13,7 @@ namespace Cart
         public string Login { get; set; }
         public string Name { get; set; }
         public string Password { get; set; } 
-        public List<Role> role = new List<Role>();
+        public List<Role> Roles { get; set; } = new List<Role>();
         public User() { }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cart.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,8 @@ namespace Cart.Controllers
                 {
                     { typeof(User),(elem) => db.Users.Add((User)elem) },
                     { typeof(Order),(elem) => db.Orders.Add((Order)elem) },
-                    { typeof(Product),(elem) => db.Products.Add((Product)elem) }
+                    { typeof(Product),(elem) => db.Products.Add((Product)elem) },
+                    { typeof(Role),(elem) => db.Roles.Add((Role)elem) }
                 };
 
             dic[typeof(T)].Invoke(elem);
@@ -39,7 +41,6 @@ namespace Cart.Controllers
 
         public void SaveRange<T>(object[] elems)
         {
-            //Создание начальных значений и запросы
             using (AppContext db = new AppContext(Options))
             {
                 foreach (var el in elems)
@@ -55,6 +56,21 @@ namespace Cart.Controllers
                 db.SaveChanges();    
             }
         }
+
+        public void SetRole(User _user, Role _role)
+        {
+            using (AppContext db = new AppContext(Options))
+            {
+                var user = db.Users.FirstOrDefault(u => u.Login == _user.Login);
+                var role = db.Roles.FirstOrDefault(r => r.Name == _role.Name);
+                if (user != null && role != null)
+                {
+                    user.Roles.Add(role);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public DBActions()
         {
             #region createDbContextOptionsBuilder
