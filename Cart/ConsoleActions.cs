@@ -29,6 +29,11 @@ namespace Cart.Controllers
             Console.WriteLine(element.ToString());
         }
 
+        public void SaveOrder(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveRange<T>(object[] elements)
         {
             foreach(var el in elements)

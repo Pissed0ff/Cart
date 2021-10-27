@@ -82,6 +82,31 @@ namespace Cart.Controllers
                 }
             }
         }
+        public void SaveOrder(Order order)
+        {
+            using(var db = new AppContext(Options))
+            {
+                var _user = db.Users.FirstOrDefault(u => u == order.User);
+                List<Position> positions =new List<Position>();
+                
+                //Сопоставление продуктов и сохранение их в БД
+                foreach (var el in order.Products)
+                {
+                    var _position = new Position();
+                    _position.Product = db.Products.FirstOrDefault(p => p == el.Product);
+                    _position.Qantity = el.Qantity;
+                    db.Positions.Add(_position);
+                    positions.Add(_position);
+                }
+                Order _order = new Order()
+                {
+                    User = _user,
+                    Products = positions
+                };
+                db.Orders.Add(_order);
+                db.SaveChanges();
+            }
+        }
 
         public T GetOneElement<T>(string filter)
         {
@@ -109,7 +134,7 @@ namespace Cart.Controllers
             var builder = new ConfigurationBuilder();
             // установка пути к текущему каталогу
             var str = Directory.GetCurrentDirectory();
-            builder.SetBasePath(str);
+            builder.SetBasePath(str+"\\DB");
             // получаем конфигурацию из файла appsettings.json
             builder.AddJsonFile("appsettings.json");
             // создаем конфигурацию

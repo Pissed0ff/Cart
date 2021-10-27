@@ -11,17 +11,14 @@ namespace Cart
         public int Id { get; set; }
         public string Cod { get; set; }
         public User User { get; set; }
-        public List<Position> Products { get; set; }
+        public List<Position> Products { get; set; } = new List<Position>();
         public DateTime DateOfOrder { get; set; }
 
         public void Add(Product prod, float quantity)
         {
             Products.Add(new Position() { Product = prod, Qantity = quantity });
         }
-        public Order()
-        {
-            Products = new List<Position>();
-        }
+        public Order(){}
     }
 
 }

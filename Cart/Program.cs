@@ -36,15 +36,30 @@ namespace Cart
             //    };
 
             #endregion
-            Controller controller = new Controller();
-            User u3 = new User() { Login = "Omagadobet",Password = "sadfweq",Name="Sasha" };
-            UserController userController = new UserController(u3);
+            //Controller controller = new Controller();
+            //User u3 = new User() { Login = "Omagadobet",Password = "sadfweq",Name="Sasha" };
+            //UserController userController = new UserController(u3);
 
-            CartController cartController = new CartController();
-            foreach(var el in cartController.products)
-            {
-                Console.WriteLine(el.Name+" : "+el.Price);
-            }
+            //CartController cartController = new CartController();
+            //cartController.User = userController.CurrentUser;
+            //cartController.AddProductToOrder(cartController.products[3], 2);
+            //cartController.AddProductToOrder(cartController.products[5], 1);
+            //cartController.AddProductToOrder(cartController.products[7], 3);
+            //cartController.SaveOrder();
+
+
+            var CC1 = new CartController();
+            var u1 = new User() { Login = "A1ex" };
+            var UC1 = new UserController(u1);
+            CC1.User = UC1.CurrentUser;
+            CC1.AddProductToOrder(CC1.products[1], 5);
+            CC1.SaveOrder();
+
+
+            //foreach(var el in cartController.products)
+            //{
+            //    Console.WriteLine(el.Name+" : "+el.Price);
+            //}
 
             //Console.WriteLine(userController.CurrentUser.Name);
             //controller.ClearDB();
@@ -59,24 +74,41 @@ namespace Cart
             //controller.SetRole(u2, r1);
 
             #region temporary query
-            //var optionsBuilder = new DbContextOptionsBuilder<AppContext>();
-            //var Options = optionsBuilder
-            //    .UseSqlServer("Server=DESKTOP-NVMUHO2;Database=cart;Trusted_Connection=True;")
-            //    .Options;
-            //using (var db = new AppContext(Options))
-            //{
-            //    var users = db.Users.Include(u => u.Roles).ToList();
-            //    // выводим все курсы
-            //    foreach (var user in users)
-            //    {
-            //        Console.WriteLine($"User: {user.Name}");
-            //        // выводим всех студентов для данного кура
-            //        foreach (Role role in user.Roles)
-            //            Console.WriteLine(role.Name);
-            //        Console.WriteLine("-------------------");
-            //    }
+            var optionsBuilder = new DbContextOptionsBuilder<AppContext>();
+            var Options = optionsBuilder
+                .UseSqlServer("Server=DESKTOP-NVMUHO2;Database=cart;Trusted_Connection=True;")
+                .Options;
 
-            //}
+            using (var db = new AppContext(Options))
+            {
+                var UserProduct = db.Orders.Join(db.Users,
+                    o => o.User,
+                    u => u,
+                    (o, u) => new
+                    {
+                        userName = u.Name,
+                        orderId = o.Id
+                    }
+                        ).Join(db.Positions,
+                        o => o.orderId,
+                        p => p.OrderId,
+                        (o, p) => new
+                        {
+                            userName = o.userName,
+                            productName = p.Product.Name,
+                            quantity = p.Qantity
+                        }
+                        );
+
+
+                
+                foreach (var el in UserProduct)
+                {
+                    Console.WriteLine( el.userName + " : " + el.productName + ": " +el.quantity);
+                   
+                }
+
+            }
             #endregion
 
         }
